@@ -34,7 +34,7 @@ constant SNES_MUL_DIV_RESULT_H($004217)
 
 // Constants
 if {defined EMULATOR_VOLUME} {
-	constant FULL_VOLUME($60)
+	constant FULL_VOLUME($50)
 } else {
 	constant FULL_VOLUME($FF)
 }
@@ -75,9 +75,14 @@ macro WaitDivResult() {
 // ********
 // * Code *
 // ********
+// Hijack
+seek($00835C)
+	jsr MSU_SoundEffects
+	
 seek($009D49)
 	jsl MSU_Main
-	
+
+// MSU Code
 seek($00F860)
 scope MSU_Main: {
 	php
@@ -110,8 +115,6 @@ IsMSUReady:
 	// Set volume
 	lda.b #FULL_VOLUME
 	sta.w MSU_AUDIO_VOLUME
-	
-	// TODO: Stop SPC music
 	
 	rep #$30
 	plx
@@ -165,4 +168,26 @@ scope TrackNeedLooping: {
 NoLooping:
 	lda.b #$01
 	rts
+}
+
+scope MSU_SoundEffects: {
+	php
+	rep #$20
+	pha
+	
+	sep #$20
+	sta SPC_COMM_0
+	
+	cmp #$FE
+	bne Exit
+	
+	stz MSU_AUDIO_CONTROL
+	stz MSU_AUDIO_VOLUME
+	
+Exit:
+	rep #$20
+	pla
+	plp
+	rts
+	
 }

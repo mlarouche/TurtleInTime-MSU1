@@ -296,6 +296,13 @@ Checksum (CRC32): 0x5940bd99
 009d28 bpl $9d49     [009d49] A:b968 X:b965 Y:0012 S:1dfc D:1e00 DB:01 NvmxdIzC V: 38 H:1252
 009d2a jsl $009d50   [009d50] A:b968 X:b965 Y:0012 S:1dfc D:1e00 DB:01 NvmxdIzC V: 38 H:1276
 
+
+; Fade out ? 
+00835c sta $2140     [012140] A:1ffc X:0011 Y:0000 S:1def D:0000 DB:01 nvMXdIzc V:111 H: 854
+
+; Stop command (SFX playing routine)
+00835c sta $2140     [012140] A:1ffe X:0001 Y:0000 S:1dec D:0000 DB:01 nvMXdIzc V: 25 H: 758
+
 ============
 = Routines =
 ============
