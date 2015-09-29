@@ -115,7 +115,11 @@ IsMSUReady:
 	// Set volume
 	lda.b #FULL_VOLUME
 	sta.w MSU_AUDIO_VOLUME
-	
+
+	// Stop SPC music and SFX (if any playing)
+	lda.b #$FE
+	sta.w SPC_COMM_0
+
 	rep #$30
 	plx
 	pla
@@ -174,20 +178,37 @@ scope MSU_SoundEffects: {
 	php
 	rep #$20
 	pha
-	
+
 	sep #$20
 	sta SPC_COMM_0
-	
+
+	cmp #$F0
+	beq Pause
+
+	cmp #$F1
+	beq Resume
+
 	cmp #$FE
-	bne Exit
-	
+	beq Stop
+
+	bra Exit
+
+Pause:
+	stz MSU_AUDIO_CONTROL
+	bra Exit
+
+Resume:
+	lda.b #$03
+	sta.w MSU_AUDIO_CONTROL
+	bra Exit
+
+Stop:
 	stz MSU_AUDIO_CONTROL
 	stz MSU_AUDIO_VOLUME
-	
+
 Exit:
 	rep #$20
 	pla
 	plp
 	rts
-	
 }

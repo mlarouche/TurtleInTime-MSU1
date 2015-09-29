@@ -16,4 +16,6 @@ wav2msu -o tmnt4_msu1-27.pcm tmnt4_lastboss.wav
 wav2msu -o tmnt4_msu1-235.pcm tmnt4_battle.wav
 wav2msu -o tmnt4_msu1-57.pcm tmnt4_elevator.wav
 wav2msu -o tmnt4_msu1-42.pcm tmnt4_staff.wav
-
+wav2msu -o tmnt4_msu1-253.pcm -l 681430 tmnt4_training.wav
+wav2msu -o tmnt4_msu1-69.pcm -l 546525 tmnt4_winner.wav
+wav2msu -o tmnt4_msu1-60.pcm -l 378744 tmnt4_memory.wav
