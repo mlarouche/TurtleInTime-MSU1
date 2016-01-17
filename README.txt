@@ -6,6 +6,10 @@ This hack adds CD quality audio to Turtle in Time using the MSU-1 chip invented 
 The hack has been tested on SD2SNES, bsnes-plus 073.1b and higan 094.
 The patched ROM needs to be named tmnt4_msu1.sfc.
 
+Note they are two IPS patches:
+- tmnt4_msu1_emulator.ips is the one to use for proper volume in emulators.
+- tmnt4_msu1.ips is for the SD2SNES
+
 The music pack can be found here: https://www.mediafire.com/?1awa8p3p5c956td
 
 Original ROM specs:
