@@ -3,14 +3,25 @@ Version 1.0
 by DarkShock
 
 This hack adds CD quality audio to Turtle in Time using the MSU-1 chip invented by byuu.
-The hack has been tested on SD2SNES, BSNES 075, bsnes-plus 073.1b and higan 094.
+The hack has been tested on SD2SNES, bsnes-plus 073.1b and higan 094.
 The patched ROM needs to be named tmnt4_msu1.sfc.
+
+The music pack can be found here: https://www.mediafire.com/?1awa8p3p5c956td
+
+Original ROM specs:
+T.M.N.T. 4
+U.S.A.
+1048576 Bytes (8.0000 Mb)
+Version: 1.0
+Checksum: Ok, 0x1683 (calculated) == 0x1683 (internal)
+Inverse checksum: Ok, 0xe97c (calculated) == 0xe97c (internal)
+Checksum (CRC32): 0x5940bd99
 
 ===============
 = Using BSNES =
 ===============
 1. Patch the ROM
-2. Generate the .pcm
+2. Unzip the .pcm
 3. Launch the game
 
 ===============
@@ -25,7 +36,7 @@ The patched ROM needs to be named tmnt4_msu1.sfc.
 ====================
 = Using on SD2SNES =
 ====================
-Drop the ROM file, som_msu1.msu and the .pcm files in any folder. (I really suggest creating a folder)
+Drop the ROM file, tmnt4_msu1.msu and the .pcm files in any folder. (I really suggest creating a folder)
 Launch the game and voilà, enjoy !
 
 ===========
@@ -33,10 +44,28 @@ Launch the game and voilà, enjoy !
 ===========
 * DarkShock - ASM hacking & coding, Music editing
 
+See MusicCredits.txt for credits of the remixed music (spoiler alert: it's all (but one) from Shell Shocked OC Remix album)
+
 =========
 = Music =
 =========
-
+3 = Sewarage
+9 = Dinosaur
+12 = Pirate
+15 = Train
+18 = Highway
+21 = Starbase
+27 = Lastboss
+42 = Staff
+45 = Fortress
+57 = Elevator
+60 = Memory
+69 = Winner
+232 = Roof
+235 = Battle
+244 = Downtown
+250 = Open
+253 = Training
 
 =============
 = Compiling =
@@ -45,7 +74,7 @@ Source is availabe on GitHub: https://github.com/mlarouche/TurtleInTime-MSU1
 
 To compile the hack you need
 
-* bass v14 (https://web.archive.org/web/20140710190910/http://byuu.org/files/bass_v14.tar.xz)
+* bass v14 (http://files.byuu.org/download/bass_v14.tar.xz)
 * wav2msu (https://github.com/mlarouche/wav2msu)
 
 To distribute the hack you need

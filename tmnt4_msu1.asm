@@ -35,9 +35,19 @@ constant SNES_MUL_DIV_RESULT_H($004217)
 // Constants
 if {defined EMULATOR_VOLUME} {
 	constant FULL_VOLUME($50)
+	constant FADE_DELTA(1)
 } else {
 	constant FULL_VOLUME($FF)
+	constant FADE_DELTA(2)
 }
+
+// Variables
+variable fadeState($7F7C00)
+variable fadeVolume($7F7C01)
+
+// FADE_STATE possibles values
+constant FADE_STATE_IDLE($00)
+constant FADE_STATE_FADEOUT($01)
 
 // **********
 // * Macros *
@@ -82,6 +92,9 @@ seek($00835C)
 seek($009D49)
 	jsl MSU_Main
 
+seek($00FFEA)
+	dw MSU_FadeUpdate
+
 // MSU Code
 seek($00F860)
 scope MSU_Main: {
@@ -115,10 +128,14 @@ IsMSUReady:
 	// Set volume
 	lda.b #FULL_VOLUME
 	sta.w MSU_AUDIO_VOLUME
+	sta.l fadeVolume
 
 	// Stop SPC music and SFX (if any playing)
 	lda.b #$FE
 	sta.w SPC_COMM_0
+	
+	lda.b #$00
+	sta.l fadeState
 
 	rep #$30
 	plx
@@ -158,9 +175,6 @@ scope TrackNeedLooping: {
 	// Good news
 	cpx #$27
 	beq NoLooping
-	// Staff
-	cpx #$2A
-	beq NoLooping
 	// Escape
 	cpx #$3F
 	beq NoLooping
@@ -182,13 +196,16 @@ scope MSU_SoundEffects: {
 	sep #$20
 	sta SPC_COMM_0
 
-	cmp #$F0
+	cmp.b #$F0
 	beq Pause
 
-	cmp #$F1
+	cmp.b #$F1
 	beq Resume
 
-	cmp #$FE
+	cmp.b #$FC
+	beq FadeOut
+
+	cmp.b #$FE
 	beq Stop
 
 	bra Exit
@@ -202,13 +219,63 @@ Resume:
 	sta.w MSU_AUDIO_CONTROL
 	bra Exit
 
+FadeOut:
+	lda.b #FADE_STATE_FADEOUT
+	sta.l fadeState
+	bra Exit
+
 Stop:
 	stz MSU_AUDIO_CONTROL
 	stz MSU_AUDIO_VOLUME
+	
+	lda.b #$00
+	sta fadeState
+	sta fadeVolume
 
 Exit:
 	rep #$20
 	pla
 	plp
 	rts
+}
+
+scope MSU_FadeUpdate: {
+	php
+	rep #$20
+	pha
+
+	sep #$20
+	CheckMSUPresence(OriginalCode)
+
+	// Switch on fade state
+	lda.l fadeState
+	cmp.b #FADE_STATE_IDLE
+	beq OriginalCode
+	cmp.b #FADE_STATE_FADEOUT
+	beq FadeOutUpdate
+
+FadeOutUpdate:
+	lda.l fadeVolume
+	sec
+	sbc.b #FADE_DELTA
+	bcs +
+	lda.b #$00
++;
+	sta.l fadeVolume
+	sta.w MSU_AUDIO_VOLUME
+	beq FadeOutCompleted
+	bra OriginalCode
+
+FadeOutCompleted:
+	lda.b #$00
+	sta.w MSU_AUDIO_CONTROL
+	lda.b #FADE_STATE_IDLE
+	sta.l fadeState
+
+OriginalCode:
+	rep #$20
+	pla
+	plp
+
+	jmp $8174
 }
